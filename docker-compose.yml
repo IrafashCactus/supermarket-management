@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: supermarket-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: supermarket
+      POSTGRES_PASSWORD: supermarket_secret
+      POSTGRES_DB: supermarket_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U supermarket -d supermarket_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: supermarket-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: supermarket-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+

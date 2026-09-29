@@ -1,0 +1,36 @@
+# ── Binaries & build output ──
+bin/
+dist/
+*.exe
+*.out
+
+# ── Dependencies ──
+node_modules/
+
+# ── Environment ──
+.env
+.env.local
+.env.*.local
+
+# ── Logs ──
+*.log
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+
+# ── IDE ──
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Go ──
+backend/tmp/
+
+# ── Docker ──
+docker-compose.override.yml
+
+# ── Project specific ──
+logo.jpg
+
