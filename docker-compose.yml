@@ -29,6 +29,7 @@ services:
       - .env
     environment:
       DB_HOST: db
+      DATABASE_URL: postgres://supermarket:supermarket_secret@db:5432/supermarket_db?sslmode=disable
     depends_on:
       db:
         condition: service_healthy
