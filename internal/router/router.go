@@ -41,6 +41,8 @@ func SetupRouter(
 			r.Get("/{id}", userHandler.Get)
 			r.Put("/{id}", userHandler.Update)
 			r.Put("/{id}/password", userHandler.ResetPassword)
+			r.Post("/{id}/reset-password", userHandler.ResetPassword)
+			r.Put("/{id}/reset-password", userHandler.ResetPassword)
 		})
 	})
 
