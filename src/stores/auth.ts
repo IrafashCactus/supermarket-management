@@ -34,7 +34,9 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       accessToken.value = null
       user.value = null
-      window.location.href = '/login'
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     }
   }
 

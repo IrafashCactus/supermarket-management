@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 
 const api = axios.create({
   baseURL: '/api/v1',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -24,6 +25,12 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     
+    // Never retry auth endpoints to avoid infinite loops
+    const url = originalRequest?.url || ''
+    if (url.includes('/auth/login') || url.includes('/auth/refresh') || url.includes('/auth/logout')) {
+      return Promise.reject(error)
+    }
+
     // If error is 401 and we haven't retried yet
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
@@ -35,8 +42,8 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${authStore.accessToken}`
         return api(originalRequest)
       } catch (refreshError) {
-        // Refresh failed, logout
-        authStore.logout()
+        // Refresh failed, clear session
+        await authStore.logout()
         return Promise.reject(refreshError)
       }
     }
