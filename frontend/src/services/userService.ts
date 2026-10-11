@@ -26,6 +26,6 @@ export const userService = {
   },
 
   async resetPassword(id: string, data: ResetPasswordRequest): Promise<void> {
-    await api.post(`/users/${id}/reset-password`, data)
+    await api.put(`/users/${id}/password`, data)
   }
 }
