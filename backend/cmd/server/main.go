@@ -17,7 +17,7 @@ import (
 	"github.com/supermarket/backend/internal/handler"
 	"github.com/supermarket/backend/internal/router"
 	"github.com/supermarket/backend/internal/service"
-	
+
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -45,8 +45,10 @@ func main() {
 
 	authHandler := handler.NewAuthHandler(authService)
 	userHandler := handler.NewUserHandler(userService)
+	categoryHandler := handler.NewCategoryHandler(service.NewCategoryService(queries))
+	productHandler := handler.NewProductHandler(service.NewProductService(queries))
 
-	r := router.SetupRouter(cfg.FrontendURL, jwtManager, authHandler, userHandler)
+	r := router.SetupRouter(cfg.FrontendURL, jwtManager, authHandler, userHandler, categoryHandler, productHandler)
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.ServerPort,

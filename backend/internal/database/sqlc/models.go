@@ -1,8 +1,10 @@
 package sqlc
 
 import (
-	"github.com/google/uuid"
+	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type User struct {
@@ -14,4 +16,29 @@ type User struct {
 	IsActive     bool      `json:"is_active"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
+}
+
+type Category struct {
+	ID          uuid.UUID      `json:"id"`
+	Name        string         `json:"name"`
+	Description sql.NullString `json:"description"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+}
+
+type Product struct {
+	ID            uuid.UUID      `json:"id"`
+	Name          string         `json:"name"`
+	Barcode       string         `json:"barcode"`
+	Sku           sql.NullString `json:"sku"`
+	CategoryID    uuid.UUID      `json:"category_id"`
+	UnitPrice     int32          `json:"unit_price"`
+	CostPrice     int32          `json:"cost_price"`
+	TaxRate       string         `json:"tax_rate"`
+	UnitOfMeasure string         `json:"unit_of_measure"`
+	ReorderLevel  int32          `json:"reorder_level"`
+	ImageURL      sql.NullString `json:"image_url"`
+	IsActive      bool           `json:"is_active"`
+	CreatedAt     time.Time      `json:"created_at"`
+	UpdatedAt     time.Time      `json:"updated_at"`
 }

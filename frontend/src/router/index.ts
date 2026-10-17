@@ -39,6 +39,18 @@ const router = createRouter({
           meta: { roles: ['admin'] }
         },
         {
+          path: 'categories',
+          name: 'categories',
+          component: () => import('@/views/CategoriesView.vue'),
+          meta: { roles: ['admin', 'manager'] }
+        },
+        {
+          path: 'products',
+          name: 'products',
+          component: () => import('@/views/ProductsView.vue'),
+          meta: { roles: ['admin', 'manager', 'storekeeper'] }
+        },
+        {
           path: 'pos',
           name: 'pos',
           component: () => import('@/views/DashboardView.vue'), // placeholder for POS

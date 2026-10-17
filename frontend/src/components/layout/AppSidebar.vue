@@ -9,8 +9,8 @@ const route = useRoute()
 
 const allMenuItems = [
   { label: 'Dashboard', icon: 'pi pi-home', routeName: 'dashboard', roles: ['admin', 'manager', 'accountant'] },
-  { label: 'Products', icon: 'pi pi-box', routeName: 'products', roles: ['admin', 'manager', 'storekeeper'], disabled: true },
-  { label: 'Categories', icon: 'pi pi-tags', routeName: 'categories', roles: ['admin', 'manager'], disabled: true },
+  { label: 'Products', icon: 'pi pi-box', routeName: 'products', roles: ['admin', 'manager', 'storekeeper'] },
+  { label: 'Categories', icon: 'pi pi-tags', routeName: 'categories', roles: ['admin', 'manager'] },
   { label: 'Inventory', icon: 'pi pi-list', routeName: 'inventory', roles: ['admin', 'manager', 'storekeeper'], disabled: true },
   { label: 'Suppliers', icon: 'pi pi-truck', routeName: 'suppliers', roles: ['admin', 'manager', 'storekeeper'], disabled: true },
   { label: 'Purchases', icon: 'pi pi-shopping-bag', routeName: 'purchases', roles: ['admin', 'manager', 'storekeeper'], disabled: true },
