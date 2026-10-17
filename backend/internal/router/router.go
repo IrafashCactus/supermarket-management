@@ -60,14 +60,20 @@ func SetupRouter(
 
 		r.Route("/products", func(r chi.Router) {
 			r.Use(middleware.Authenticator(jwtManager))
-			r.Use(middleware.RequireRole("admin", "manager", "storekeeper"))
 
-			r.Get("/", productHandler.List)
-			r.Post("/", productHandler.Create)
-			r.Get("/barcode/{barcode}", productHandler.GetByBarcode)
-			r.Get("/{id}", productHandler.Get)
-			r.Put("/{id}", productHandler.Update)
-			r.Delete("/{id}", productHandler.Delete)
+			r.Group(func(r chi.Router) {
+				r.Use(middleware.RequireRole("admin", "manager", "storekeeper"))
+				r.Get("/", productHandler.List)
+				r.Get("/barcode/{barcode}", productHandler.GetByBarcode)
+				r.Get("/{id}", productHandler.Get)
+			})
+
+			r.Group(func(r chi.Router) {
+				r.Use(middleware.RequireRole("admin", "manager"))
+				r.Post("/", productHandler.Create)
+				r.Put("/{id}", productHandler.Update)
+				r.Delete("/{id}", productHandler.Delete)
+			})
 		})
 	})
 

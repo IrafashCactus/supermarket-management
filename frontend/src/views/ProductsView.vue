@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 import { productService } from '@/services/productService'
 import { categoryService } from '@/services/categoryService'
 import type { Product, CreateProductRequest, UpdateProductRequest, ProductListParams } from '@/types/product'
@@ -18,6 +19,8 @@ import { useConfirm } from 'primevue/useconfirm'
 
 const toast = useToast()
 const confirm = useConfirm()
+const authStore = useAuthStore()
+const canManageProducts = computed(() => authStore.checkRole(['admin', 'manager']))
 
 const products = ref<Product[]>([])
 const loading = ref(false)
@@ -237,7 +240,7 @@ async function toggleProductStatus(product: Product) {
   <div>
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold text-surface-900">Products</h1>
-      <Button label="Add Product" icon="pi pi-plus" @click="openNew" />
+      <Button v-if="canManageProducts" label="Add Product" icon="pi pi-plus" @click="openNew" />
     </div>
 
     <!-- Filter Bar -->
@@ -304,7 +307,7 @@ async function toggleProductStatus(product: Product) {
             <Tag :value="data.is_active ? 'Active' : 'Inactive'" :severity="data.is_active ? 'success' : 'danger'" />
           </template>
         </Column>
-        <Column header="Actions" :exportable="false" style="min-width: 8rem">
+        <Column v-if="canManageProducts" header="Actions" :exportable="false" style="min-width: 8rem">
           <template #body="{ data }">
             <Button icon="pi pi-pencil" text rounded @click="editProduct(data)" title="Edit" />
             <Button
