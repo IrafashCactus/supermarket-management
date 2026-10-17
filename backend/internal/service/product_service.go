@@ -36,7 +36,7 @@ func (s *ProductService) List(ctx context.Context, page, perPage int, search, ca
 		if err != nil {
 			return dto.ListResponse[dto.ProductResponse]{}, ErrInvalidCatalogRequest
 		}
-		params.CategoryID = &id
+		params.CategoryID = uuid.NullUUID{UUID: id, Valid: true}
 	}
 	if active != "" {
 		value, err := strconv.ParseBool(active)
@@ -57,7 +57,7 @@ func (s *ProductService) List(ctx context.Context, page, perPage int, search, ca
 	}
 	items := make([]dto.ProductResponse, 0, len(products))
 	for _, product := range products {
-		item, err := mapProduct(product.ID, product.Name, product.Barcode, product.Sku, product.CategoryID, product.CategoryName, product.UnitPrice, product.CostPrice, product.TaxRate, product.UnitOfMeasure, product.ReorderLevel, product.ImageURL, product.IsActive, product.CreatedAt, product.UpdatedAt)
+		item, err := mapProduct(product.ID, product.Name, product.Barcode, product.Sku, product.CategoryID, product.CategoryName, product.UnitPrice, product.CostPrice, product.TaxRate, product.UnitOfMeasure, product.ReorderLevel, product.ImageUrl, product.IsActive, product.CreatedAt, product.UpdatedAt)
 		if err != nil {
 			return dto.ListResponse[dto.ProductResponse]{}, err
 		}
@@ -77,7 +77,7 @@ func (s *ProductService) Get(ctx context.Context, id uuid.UUID) (dto.ProductResp
 	if err != nil {
 		return dto.ProductResponse{}, catalogDBError(err)
 	}
-	return mapProduct(product.ID, product.Name, product.Barcode, product.Sku, product.CategoryID, product.CategoryName, product.UnitPrice, product.CostPrice, product.TaxRate, product.UnitOfMeasure, product.ReorderLevel, product.ImageURL, product.IsActive, product.CreatedAt, product.UpdatedAt)
+	return mapProduct(product.ID, product.Name, product.Barcode, product.Sku, product.CategoryID, product.CategoryName, product.UnitPrice, product.CostPrice, product.TaxRate, product.UnitOfMeasure, product.ReorderLevel, product.ImageUrl, product.IsActive, product.CreatedAt, product.UpdatedAt)
 }
 
 func (s *ProductService) GetByBarcode(ctx context.Context, barcode string) (dto.ProductResponse, error) {
@@ -85,7 +85,7 @@ func (s *ProductService) GetByBarcode(ctx context.Context, barcode string) (dto.
 	if err != nil {
 		return dto.ProductResponse{}, catalogDBError(err)
 	}
-	return mapProduct(product.ID, product.Name, product.Barcode, product.Sku, product.CategoryID, product.CategoryName, product.UnitPrice, product.CostPrice, product.TaxRate, product.UnitOfMeasure, product.ReorderLevel, product.ImageURL, product.IsActive, product.CreatedAt, product.UpdatedAt)
+	return mapProduct(product.ID, product.Name, product.Barcode, product.Sku, product.CategoryID, product.CategoryName, product.UnitPrice, product.CostPrice, product.TaxRate, product.UnitOfMeasure, product.ReorderLevel, product.ImageUrl, product.IsActive, product.CreatedAt, product.UpdatedAt)
 }
 
 func (s *ProductService) Create(ctx context.Context, req dto.CreateProductRequest) (dto.ProductResponse, error) {
@@ -109,7 +109,7 @@ func (s *ProductService) Update(ctx context.Context, id uuid.UUID, req dto.Updat
 		ID: id, Name: values.Name, Barcode: values.Barcode, Sku: values.Sku,
 		CategoryID: values.CategoryID, UnitPrice: values.UnitPrice, CostPrice: values.CostPrice,
 		TaxRate: values.TaxRate, UnitOfMeasure: values.UnitOfMeasure,
-		ReorderLevel: values.ReorderLevel, ImageURL: values.ImageURL, IsActive: req.IsActive,
+		ReorderLevel: values.ReorderLevel, ImageUrl: values.ImageUrl, IsActive: req.IsActive,
 	})
 	if err != nil {
 		return dto.ProductResponse{}, catalogDBError(err)
@@ -139,7 +139,7 @@ func validateProduct(req dto.CreateProductRequest) (sqlc.CreateProductParams, er
 		UnitPrice: req.UnitPrice, CostPrice: req.CostPrice,
 		TaxRate:       strconv.FormatFloat(req.TaxRate, 'f', 2, 64),
 		UnitOfMeasure: strings.TrimSpace(req.UnitOfMeasure),
-		ReorderLevel:  req.ReorderLevel, ImageURL: nullableString(req.ImageURL),
+		ReorderLevel:  req.ReorderLevel, ImageUrl: nullableString(req.ImageURL),
 	}, nil
 }
 
